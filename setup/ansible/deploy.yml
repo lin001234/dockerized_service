@@ -1,0 +1,42 @@
+- name: Deploy dockerized Node.js Service
+  hosts: all
+  become: true
+  vars:
+    dockerhub_username: "{{ dockerhub_username }}"
+    docker_image_name: "{{ dockerhub_username }}/nodejs-service"
+    docker_image_tag: latest
+    docker_image_full: "{{ docker_image_name }}:{{ docker_image_tag }}"
+
+  tasks:
+    #Step 1 pull docker image
+    - name: Pull latest docker iamge from dockerhub
+      docker_image:
+        name: "{{ docker_image_name }}"
+        tag: "{{ docker_image_tag }}"
+        source: pull
+    
+    - name: Stop existing container with same name
+      docker_container:
+        name: nodejs-service
+        state: stopped
+        ignore_errors: yes
+
+    - name: Remove existing container with same name
+      docker_container:
+        name: nodejs-service
+        state: absent
+        ignore_errors: yes
+    
+    - name: Run new docker container 
+      docker_container:
+        name: nodejs-service
+        image: "{{docker_image_full}}"
+        state: started
+        restart_policy: unless-stopped
+        published_ports:
+          - "3000:3000"
+        env:
+          SECRET_MESSAGE: "{{ secret_message }}"
+          USERNAME: "{{ username }}"
+          PASSWORD: "{{ password }}"
+

@@ -29,6 +29,10 @@ jobs:
     needs: build
 
     steps:
+      - name: List files in ansible directory for debug
+        run: |
+          ls -R ansible
+          
       - name: Run ansible playbook
         uses: dawidd6/action-ansible-playbook@v4
         with:
@@ -37,8 +41,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           options: |
             --inventory inventory.ini
-            --extra-vars  "dockerhub_username=${{ vars.DOCKERHUB_USERNAME }} \
-                          secret_message=${{ secrets.SECRET_MESSAGE }} \
-                          username=${{ vars.APP_USERNAME }} \
-                          password=${{ secrets.APP_PASSWORD }}"
-          
+            --extra-vars  |
+            dockerhub_username=${{ vars.DOCKERHUB_USERNAME }} 
+            secret_message=${{ secrets.SECRET_MESSAGE }} 
+            username=${{ vars.APP_USERNAME }} 
+            password=${{ secrets.APP_PASSWORD }}
+

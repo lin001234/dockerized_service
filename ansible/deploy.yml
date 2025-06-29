@@ -43,7 +43,6 @@
       docker_container:
         name: nodejs-service
         state: absent
-        force-kill: yes
       ignore_errors: yes
     
     - name: Run new docker container 

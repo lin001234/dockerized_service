@@ -9,11 +9,22 @@
 
   tasks:
     # Step 0: Install Docker if not present
-    - name: Ensure Docker is installed
+    # Better Docker detection using package check
+    - name: Check if Docker package is installed
+      shell: dpkg -l | grep docker.io
+      register: docker_installed
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Install Docker only if not installed
       apt:
         name: docker.io
         state: present
         update_cache: yes
+        cache_valid_time: 3600
+      when: docker_installed.rc != 0
+      environment:
+        DEBIAN_FRONTEND: noninteractive
 
     - name: Start and enable Docker service
       systemd:

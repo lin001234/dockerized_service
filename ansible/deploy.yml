@@ -38,18 +38,13 @@
         name: "{{ docker_image_name }}"
         tag: "{{ docker_image_tag }}"
         source: pull
-    
-    - name: Stop existing container with same name
-      docker_container:
-        name: nodejs-service
-        state: stopped
-        ignore_errors: yes
 
-    - name: Remove existing container with same name
+    - name: Stop and remove existing container with same name
       docker_container:
         name: nodejs-service
         state: absent
-        ignore_errors: yes
+        force-kill: yes
+      ignore_errors: yes
     
     - name: Run new docker container 
       docker_container:
@@ -63,4 +58,6 @@
           SECRET_MESSAGE: "{{ secret_message }}"
           USERNAME: "{{ username }}"
           PASSWORD: "{{ password }}"
+        pull: true
+        recreate: true
 

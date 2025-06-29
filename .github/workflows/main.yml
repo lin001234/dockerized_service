@@ -29,10 +29,8 @@ jobs:
     needs: build
 
     steps:
-      - name: Check working directory
-        run: |
-          echo "Current working directory: $(pwd)"
-          ls -R
+      - name: Checkout code
+        uses: actions/checkout@v2
           
       - name: Run ansible playbook
         uses: dawidd6/action-ansible-playbook@v4

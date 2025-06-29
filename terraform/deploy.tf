@@ -1,6 +1,6 @@
 # Resource Group
 resource "azurerm_resource_group" "main" {
-  name     = "nodejs_project"
+  name     = "Dockerized_service"
   location = "West Europe"
 }
 
@@ -21,11 +21,6 @@ resource "azurerm_subnet" "internal" {
 }
 
 # Public ip_configuration
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
-}
-
 resource "azurerm_public_ip" "pub_ip" {
   name                = "VM-publicIP"
   resource_group_name = azurerm_resource_group.main.name

@@ -21,8 +21,8 @@ jobs:
 
       - name: build and push docker image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-service:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodejs-service:latest
+          docker build -t ${{ vars.DOCKERHUB_USERNAME }}/nodejs-service:latest .
+          docker push ${{ vars.DOCKERHUB_USERNAME }}/nodejs-service:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -37,8 +37,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           options: |
             --inventory inventory.ini
-            --extra-vars  "dockerhub_username=${{ secrets.DOCKERHUB_USERNAME }} \
+            --extra-vars  "dockerhub_username=${{ vars.DOCKERHUB_USERNAME }} \
                           secret_message=${{ secrets.SECRET_MESSAGE }} \
-                          username=${{ secrets.APP_USERNAME }} \
+                          username=${{ vars.APP_USERNAME }} \
                           password=${{ secrets.APP_PASSWORD }}"
           
